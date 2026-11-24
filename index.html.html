@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mindcare: Skrining Kesehatan Mental</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#eef3f3;--surface:#fff;--ink:#16282c;--mute:#52666b;--line:#cfdcdd;--accent:#1d6b73;--accent-ink:#fff;--soft:#dcebec;--warn-bg:#fdf1e3;--warn-ink:#6b3d06;--warn-line:#e8c79a;--g1:rgba(29,107,115,.18);--g2:rgba(90,165,138,.20);--g3:rgba(224,184,74,.16);--dot:rgba(22,40,44,.08);--ring:rgba(29,107,115,.24);
+--b0:#5aa58a;--b1:#9bbf6b;--b2:#e0b84a;--b3:#e08a45;--b4:#c4504a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b1e;--surface:#172629;--ink:#e6f0f1;--mute:#9bb0b4;--line:#2a3d41;--accent:#6cc4cc;--accent-ink:#0b1a1c;--soft:#1f3438;--warn-bg:#2b2113;--warn-ink:#f1d9b0;--warn-line:#5a4524;--g1:rgba(108,196,204,.16);--g2:rgba(90,165,138,.15);--g3:rgba(224,138,69,.09);--dot:rgba(230,240,241,.07);--ring:rgba(108,196,204,.22);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1b1e;--surface:#172629;--ink:#e6f0f1;--mute:#9bb0b4;--line:#2a3d41;--accent:#6cc4cc;--accent-ink:#0b1a1c;--soft:#1f3438;--warn-bg:#2b2113;--warn-ink:#f1d9b0;--warn-line:#5a4524;--g1:rgba(108,196,204,.16);--g2:rgba(90,165,138,.15);--g3:rgba(224,138,69,.09);--dot:rgba(230,240,241,.07);--ring:rgba(108,196,204,.22);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 Figtree,system-ui,-apple-system,"Segoe UI",sans-serif}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 10% 6%,var(--g1) 0,transparent 36%),radial-gradient(circle at 94% 30%,var(--g2) 0,transparent 32%),radial-gradient(circle at 78% 96%,var(--g3) 0,transparent 38%),radial-gradient(circle at 6% 88%,var(--g2) 0,transparent 30%),radial-gradient(var(--dot) 1.2px,transparent 1.5px) 0 0/26px 26px}
+body::after{content:"";position:fixed;top:0;right:0;width:560px;height:560px;z-index:-1;pointer-events:none;background:repeating-radial-gradient(circle at 100% 0,transparent 0 40px,var(--ring) 40px 41px);-webkit-mask-image:radial-gradient(circle at 100% 0,#000 0,transparent 70%);mask-image:radial-gradient(circle at 100% 0,#000 0,transparent 70%)}
+@media(max-width:560px){body::after{width:320px;height:320px}}
+.wrap{max-width:720px;margin:0 auto;padding:40px 20px 72px}
+h1,h2,h3{font-family:"Bricolage Grotesque",Figtree,system-ui,sans-serif;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,6vw,3rem);font-weight:700;letter-spacing:-.02em;max-width:16ch}
+.lead{color:var(--mute);max-width:56ch;margin:16px 0 0}
+.note{margin:28px 0;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font-size:15px;color:var(--mute)}
+.pick{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:28px 0 8px}
+@media(max-width:560px){.pick{grid-template-columns:1fr}}
+.pick button{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px;min-height:160px;text-align:left;font:inherit;color:#fff;border:0;border-radius:20px;padding:18px 18px 16px;cursor:pointer;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 10px 22px -12px var(--c1)}
+.pick button[data-k='phq9']{--c1:#4f5fd1;--c2:#7b5fd9}
+.pick button[data-k='gad7']{--c1:#bf3f4f;--c2:#d0583a}
+.pick button[data-k='phq']{--c1:#363b9a;--c2:#6a3fa0}
+.pick button[data-k='gad']{--c1:#9c2f5a;--c2:#c4453f}
+.pick button::before{content:'';position:absolute;right:-34px;top:-34px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 65%);pointer-events:none}
+.pick button::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.24) 50%,transparent 65%);transform:translateX(-120%);pointer-events:none;transition:transform .8s ease}
+.pick .ico{display:block;font-size:30px;line-height:1;margin-bottom:6px}
+.pick .pd{font-size:14px;line-height:1.4;color:rgba(255,255,255,.93)}
+.pick .tag{align-self:flex-start;margin-top:auto;padding:3px 12px;border-radius:20px;background:rgba(255,255,255,.22);font-size:13px;font-weight:600}
+.pick .ck{position:absolute;z-index:1;right:14px;top:14px;display:none;place-items:center;width:26px;height:26px;border-radius:50%;background:#fff;color:var(--c1);font-style:normal;font-weight:700}
+.pick button[aria-pressed='true']{box-shadow:0 0 0 3px var(--bg),0 0 0 6px var(--c1),0 16px 28px -12px var(--c1)}
+.pick button[aria-pressed='true'] .ck{display:grid}
+
+.pick b{display:block;color:#fff;font:700 1.2rem/1.2 "Bricolage Grotesque",Figtree,sans-serif}
+
+button:focus-visible,input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.meta{display:flex;justify-content:space-between;align-items:center;margin:32px 0 8px;color:var(--mute);font-size:15px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+fieldset{min-width:0;border:1px solid var(--line);border-radius:18px;background:var(--surface);margin:0 0 14px;padding:18px 18px 16px;transition:border-color .25s}
+fieldset.done{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+legend{float:left;width:100%;padding:0;margin:0 0 14px}
+.qh{display:flex;gap:12px;align-items:flex-start}
+.qn{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:var(--soft);color:var(--accent);font:700 .95rem 'Bricolage Grotesque',Figtree,sans-serif;transition:background .25s,color .25s}
+fieldset.done .qn{background:var(--accent);color:var(--accent-ink)}
+.qt{font-weight:600;font-size:1.06rem;line-height:1.4;max-width:56ch;padding-top:3px}
+.opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;clear:both}
+@media(max-width:560px){.opts{grid-template-columns:1fr 1fr}}
+.opts label{position:relative;display:block}
+.opts input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.opts span{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 8px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);font-size:14.5px;line-height:1.25;transition:background .2s,border-color .2s}
+.opts span::before{content:'';flex:none;width:10px;height:10px;border-radius:50%;background:var(--lv);transition:transform .2s,box-shadow .2s}
+.opts span[data-v='0']{--lv:var(--b0)}.opts span[data-v='1']{--lv:var(--b2)}.opts span[data-v='2']{--lv:var(--b3)}.opts span[data-v='3']{--lv:var(--b4)}
+.opts label:hover span{border-color:var(--lv)}
+.opts input:checked+span{border-color:var(--lv);background:color-mix(in srgb,var(--lv) 18%,var(--surface));font-weight:600}
+.opts input:checked+span::before{transform:scale(1.5);box-shadow:0 0 0 3px color-mix(in srgb,var(--lv) 30%,transparent)}
+.cta{font:600 1rem Figtree,sans-serif;background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:14px 26px;cursor:pointer;margin-top:28px}
+.cta[disabled]{opacity:.4;cursor:not-allowed}
+.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent);margin-left:10px}
+#result{margin-top:12px}
+.score{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:8px 0 4px}
+.score strong{font:700 clamp(3.5rem,14vw,5.5rem)/1 "Bricolage Grotesque",sans-serif;letter-spacing:-.03em}
+.score em{font-style:normal;font:600 1.4rem "Bricolage Grotesque",sans-serif}
+.gauge{position:relative;display:grid;grid-auto-flow:column;gap:3px;margin:26px 0 8px}
+.gauge div{height:16px;border-radius:4px}
+.pin{position:absolute;top:-9px;width:4px;height:34px;background:var(--ink);border-radius:2px;transform:translateX(-50%);box-shadow:0 0 0 2px var(--bg)}
+.ticks{display:grid;grid-auto-flow:column;gap:3px;font-size:12.5px;color:var(--mute)}
+.ticks span{text-align:center}
+.box{margin-top:24px;padding:18px 20px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+.box h3{font-size:1.1rem;margin-bottom:6px}
+.box ul{margin:8px 0 0;padding-left:20px}
+.crisis{background:var(--warn-bg);border-color:var(--warn-line);color:var(--warn-ink)}
+footer{margin-top:48px;font-size:14px;color:var(--mute);border-top:1px solid var(--line);padding-top:20px}
+.theme{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:16px;background:none;border:1px solid var(--line);border-radius:20px;color:var(--mute);font:inherit;font-size:14px;padding:4px 12px;cursor:pointer}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.brand svg{width:48px;height:48px;flex:none}
+.brand b{display:block;font:700 1.5rem/1.1 "Bricolage Grotesque",Figtree,sans-serif;letter-spacing:-.01em}
+.brand span{display:block;font-size:14px;color:var(--mute);margin-top:2px}
+.contact a{color:var(--accent);font-weight:600;word-break:break-all}
+.contact .map{display:block;margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;font-weight:400;word-break:normal}
+.map svg{display:block;width:100%;height:auto}
+.mapcta{display:block;padding:12px 16px;font-weight:600;color:var(--accent);background:var(--surface);border-top:1px solid var(--line)}
+.map:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+html{scroll-behavior:smooth}
+.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 24px}
+.nav a[href='#pick']{--c1:#1d6b73;--c2:#4aa58b}.nav a[href='#jurnal']{--c1:#4f5fd1;--c2:#8a5fd9}.nav a[href='#konsultasi']{--c1:#d0583a;--c2:#c23f6b}
+@media(max-width:560px){.nav{gap:8px}}
+.nav a{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:9px;min-height:52px;padding:10px 12px;border:0;border-radius:16px;text-decoration:none;color:#fff;font:600 15px/1.2 Figtree,system-ui,sans-serif;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 10px 20px -12px var(--c1)}
+.nav a::before{content:'';position:absolute;right:-22px;top:-26px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.3),transparent 65%);pointer-events:none}
+.nav a::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-120%);pointer-events:none}
+.nav .ni{font-size:22px;line-height:1;display:inline-block}
+.nav a.on{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--c1),0 14px 24px -12px var(--c1)}
+@media(max-width:560px){.nav a{flex-direction:column;gap:4px;min-height:68px;font-size:13.5px;padding:10px 6px;text-align:center}}
+.nav a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:34px 28px 30px;margin:4px 0 8px;background:var(--surface);border:1px solid var(--line)}
+.hero::before{content:'';position:absolute;right:-110px;top:-110px;width:340px;height:340px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,var(--g2) 0,transparent 58%),repeating-radial-gradient(circle,transparent 0 24px,var(--ring) 24px 25px)}
+.hero>*{position:relative}
+.hero h1{font-size:clamp(2.5rem,10vw,4.6rem);line-height:1.02;letter-spacing:-.035em;max-width:13.5ch}
+.pulse{display:block;width:min(100%,300px);height:40px;margin:18px 0 6px;overflow:visible}
+.pulse path{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1}
+.hero .lead{margin-top:10px;max-width:46ch}
+.hero-cta{display:inline-block;text-decoration:none;margin-top:24px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:20px 0 0;padding:0}
+.chips li{padding:6px 13px;border-radius:20px;background:var(--soft);font-size:14px}
+.chips li::before{content:'✓ ';color:var(--accent);font-weight:700}
+@media(max-width:560px){.hero{padding:26px 20px 24px;border-radius:22px}}
+.consult{margin-top:40px}
+.consult h3{font-size:1.5rem;margin-bottom:4px}
+.consult h4{font:700 1.1rem 'Bricolage Grotesque',Figtree,sans-serif;margin:0}
+.pros{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 24px}
+@media(max-width:560px){.pros{grid-template-columns:1fr}}
+.pro{padding:16px 16px 14px;border-radius:16px;border:1px solid var(--line);background:var(--bg)}
+.pro.pp{border-top:4px solid var(--accent)}
+.pro.pr{border-top:4px solid #7b5fd9}
+.pro .pi{display:block;font-size:28px;line-height:1;margin-bottom:8px}
+.pro h4{margin-bottom:6px}
+.pro p{margin:0;font-size:15px;color:var(--mute)}
+.cform h4{margin:0 0 12px}
+.cform input,.cform select{display:block;width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:14px}
+.cform input:focus-visible,.cform select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.cform textarea{min-height:90px;margin-bottom:6px}
+.csend{display:inline-block;text-decoration:none;margin-top:8px}
+.box li a{color:var(--accent);font-weight:600}
+.journal{margin-top:40px}
+.journal h3{font-size:1.5rem;margin-bottom:4px}
+.journal h4{font:700 1rem 'Bricolage Grotesque',Figtree,sans-serif;margin:24px 0 4px}
+.jhint{margin:0;color:var(--mute);font-size:15px}
+.cal{margin:18px 0 10px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.calh b{font:700 1.1rem 'Bricolage Grotesque',Figtree,sans-serif}
+.calh button{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+.calh button:disabled{opacity:.35;cursor:not-allowed}
+.calh button:focus-visible,.cd:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cdn{text-align:center;font-size:12px;color:var(--mute);padding-bottom:2px}
+.cd{position:relative;aspect-ratio:1;min-height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
+.cd b{font-size:13px;font-weight:600;line-height:1.1}
+.cd em{font-style:normal;font-size:14px;line-height:1.1;min-height:1em}
+.cd.mood{background:color-mix(in srgb,var(--mc) 26%,var(--surface));border-color:var(--mc)}
+.cd.has::after{content:'';position:absolute;bottom:4px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.cd.today{box-shadow:inset 0 0 0 1px var(--accent)}
+.cd.today b{color:var(--accent)}
+.cd.sel{outline:2.5px solid var(--accent);outline-offset:1px}
+.cd:disabled{opacity:.35;cursor:not-allowed}
+.cleg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:12.5px;color:var(--mute)}
+.cleg span{display:inline-flex;align-items:center;gap:6px}
+.cleg i{width:10px;height:10px;border-radius:50%}
+.jdate{margin:14px 0 12px;font-weight:600}
+.moods{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.moods button{font:inherit;font-size:12.5px;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:70px;padding:8px 10px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);cursor:pointer}
+.moods button span{font-size:26px;line-height:1.1}
+.moods button[aria-checked='true']{border-color:var(--accent);background:var(--soft);font-weight:600}
+.moods button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.jlab{display:block;font-weight:600;margin-bottom:6px}
+textarea{display:block;width:100%;min-height:120px;resize:vertical;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px}
+.jrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.jrow .cta{margin-top:14px}
+#jmsg{margin-top:14px;font-size:15px;color:var(--mute)}
+.strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:8px 0 4px}
+.strip div{text-align:center;font-size:12.5px;color:var(--mute)}
+.strip i{display:block;height:28px;border-radius:7px;border:1.5px dashed var(--line);margin-bottom:4px}
+.strip i.on{border:0}
+.entry{border-top:1px solid var(--line);padding:14px 0 4px}
+.entry:first-child{margin-top:12px}
+.eh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14.5px;color:var(--mute)}
+.eh b{color:var(--ink)}
+.entry p{margin:8px 0 10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.entry button{font:inherit;font-size:14px;background:none;border:1px solid var(--line);border-radius:8px;color:var(--mute);padding:3px 10px;cursor:pointer;margin-bottom:10px}
+@media (prefers-reduced-motion:no-preference){
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes pop{0%{transform:scale(.93)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.wrap>.brand,.wrap>.nav,.wrap>h1,.wrap>.lead,.wrap>.note,.wrap>.pick{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.wrap>.hero{animation:rise .7s cubic-bezier(.2,.7,.2,1) .16s both}
+.pulse path{animation:draw 2s ease-out .7s both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.wrap>.nav{animation-delay:.08s}.wrap>h1{animation-delay:.16s}.wrap>.lead{animation-delay:.24s}.wrap>.note{animation-delay:.32s}.wrap>.pick{animation-delay:.42s}
+.brand svg{animation:breathe 5s ease-in-out infinite}
+body::after{transform-origin:100% 0;animation:breathe 12s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cardin{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+.pick button{transition:transform .25s,box-shadow .25s;animation:cardin .6s cubic-bezier(.2,.7,.2,1) backwards}
+.pick button:nth-child(1){animation-delay:.55s}.pick button:nth-child(2){animation-delay:.65s}.pick button:nth-child(3){animation-delay:.75s}.pick button:nth-child(4){animation-delay:.85s}
+.pick .ico{animation:float 3.6s ease-in-out infinite}
+.pick button:nth-child(2) .ico{animation-delay:-.9s}.pick button:nth-child(3) .ico{animation-delay:-1.8s}.pick button:nth-child(4) .ico{animation-delay:-2.7s}
+.pick button:hover{transform:translateY(-5px) scale(1.015)}
+.pick button:hover::after{transform:translateX(120%)}
+.nav a{transition:transform .25s,box-shadow .25s;animation:cardin .6s cubic-bezier(.2,.7,.2,1) backwards}
+.nav a:nth-child(1){animation-delay:.5s}.nav a:nth-child(2){animation-delay:.6s}.nav a:nth-child(3){animation-delay:.7s}
+.nav a::after{transition:transform .8s ease}
+.nav a:hover,.nav a:focus-visible{transform:translateY(-4px) scale(1.03)}
+.nav a:hover::after,.nav a:focus-visible::after{transform:translateX(120%)}
+.nav a:active{transform:scale(.96)}
+.nav .ni{animation:float 3.2s ease-in-out infinite}
+.nav a:nth-child(2) .ni{animation-delay:-1s}.nav a:nth-child(3) .ni{animation-delay:-2s}
+.nav a:hover .ni{animation:mconf .7s ease-in-out}
+.nav a.on{animation:pop .35s ease-out}
+.cta{transition:transform .15s,opacity .2s}
+.cta:not([disabled]):hover{transform:translateY(-2px)}
+#quiz:not([hidden]),#result:not([hidden]){animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.opts input:checked+span,.moods button[aria-checked='true']{animation:pop .28s ease-out}
+.gauge div{transform-origin:left;animation:grow .6s cubic-bezier(.2,.7,.2,1) both}
+.gauge div:nth-child(2){animation-delay:.05s}.gauge div:nth-child(3){animation-delay:.15s}.gauge div:nth-child(4){animation-delay:.25s}.gauge div:nth-child(5){animation-delay:.35s}.gauge div:nth-child(6){animation-delay:.45s}
+.pin{transition:left 1.1s cubic-bezier(.2,.7,.2,1) .5s}
+.cd{transition:transform .15s}
+.cd:hover:not(:disabled){transform:translateY(-2px)}
+.strip i.on{animation:pop .45s ease-out both}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@keyframes mhappy{0%,100%{transform:translateY(0) scale(1)}25%{transform:translateY(-9px) scale(1.12)}50%{transform:translateY(0) scale(1.06,.92)}70%{transform:translateY(-4px) scale(1.05)}}
+@keyframes mgood{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes mneutral{0%,100%{transform:translateX(0)}30%{transform:translateX(-4px)}60%{transform:translateX(4px)}}
+@keyframes mconf{0%,100%{transform:rotate(0)}20%{transform:rotate(-13deg)}40%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(3deg)}}
+@keyframes mcry{0%,100%{transform:translateY(0) scale(1)}15%{transform:translateY(3px) scale(.96)}30%{transform:translateY(0) scale(1)}45%{transform:translateY(3px) scale(.96)}60%{transform:translateY(0) scale(1)}}
+@keyframes tear{0%{opacity:0;transform:translateY(0)}20%{opacity:.9}100%{opacity:0;transform:translateY(17px)}}
+.moods button span{display:inline-block;position:relative;transform-origin:50% 70%}
+.moods button[data-m='0'] span{animation:mhappy 2.8s ease-in-out infinite}
+.moods button[data-m='1'] span{animation:mgood 3.2s ease-in-out infinite}
+.moods button[data-m='2'] span{animation:mneutral 3.6s ease-in-out infinite}
+.moods button[data-m='3'] span{animation:mconf 3.4s ease-in-out infinite}
+.moods button[data-m='4'] span{animation:mcry 3s ease-in-out infinite}
+.moods button[data-m='4'] span::after{content:'';position:absolute;left:60%;top:58%;width:5px;height:8px;background:#5aa8e0;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;opacity:0;animation:tear 2s ease-in infinite}
+.moods button:hover span,.moods button:focus-visible span,.moods button[aria-checked='true'] span{animation-duration:1.1s}
+}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<button class="theme" id="theme" type="button">Mode gelap</button>
+<main class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 48 48" role="img" aria-label="Logo Mindcare"><rect width="48" height="48" rx="14" style="fill:var(--accent)"/><path d="M24 35C14 28 12 22 12 18.5 12 15 14.6 12.5 17.8 12.5c2.6 0 5 1.5 6.200 4 1.200-2.500 3.600-4 6.200-4C33.400 12.500 36 15 36 18.500 36 22 34 28 24 35Z" fill="none" stroke-width="2.600" stroke-linejoin="round" style="stroke:var(--accent-ink)"/><path d="M24 30v-8" stroke-width="2.200" stroke-linecap="round" fill="none" style="stroke:var(--accent-ink)"/><path d="M24 25.500c0-3 2.500-4.200 4.600-4 0 2.500-1.700 4-4.600 4Z" style="fill:var(--accent-ink)"/></svg>
+    <div><b>Mindcare</b><span>Test Kesehatan Mental</span></div>
+  </div>
+  <nav class="nav" aria-label="Navigasi halaman"><a href="#pick"><span class="ni" aria-hidden="true">🧠</span>Tes mental</a><a href="#jurnal"><span class="ni" aria-hidden="true">📔</span>Jurnal harian</a><a href="#konsultasi"><span class="ni" aria-hidden="true">💬</span>Konsultasi</a></nav>
+  <header class="hero">
+    <h1>Cek Kesehatan Mentalmu Sekarang</h1>
+    <svg class="pulse" viewBox="0 0 300 40" aria-hidden="true"><path pathLength="1" d="M2 24H96l12-17 14 31 14-23 10 9H298"/></svg>
+  <p class="lead">Jawab pertanyaan berdasarkan 2 minggu terakhir. Kamu mendapat skor dan penjelasan sederhana tentang artinya. Jawabanmu tidak dikirim atau disimpan di mana pun.</p>
+    <a class="cta hero-cta" href="#pick">Mulai tes sekarang</a>
+    <ul class="chips"><li>Tanpa daftar akun</li><li>Jawaban tidak dikirim ke mana pun</li><li>2 sampai 10 menit</li></ul>
+  </header>
+  <p class="note">Ini alat skrining, bukan diagnosis. Hanya psikolog, psikiater, atau dokter yang bisa menilai kondisimu secara utuh.</p>
+
+  <div class="pick" id="pick" role="group" aria-label="Pilih jenis skrining"></div>
+
+  <section id="quiz" hidden>
+    <div class="meta"><span id="count"></span><span id="tname"></span></div>
+    <div class="bar"><i id="prog"></i></div>
+    <p id="intro" style="margin:20px 0 0;font-weight:600"></p>
+    <form id="form" onsubmit="return false"></form>
+    <button class="cta" id="go" type="button" disabled>Lihat hasil</button>
+  </section>
+
+  <section id="result" hidden aria-live="polite"></section>
+
+  <section id="jurnal" class="box journal" aria-labelledby="jt">
+    <h3 id="jt">Jurnal harian</h3>
+    <p class="jhint">Tulis perasaan dan kejadian hari ini. Catatan hanya tersimpan di perangkat dan browser ini, tidak dikirim ke mana pun. Jika muncul keinginan menyakiti diri sendiri, hubungi 119 ekstensi 8.</p>
+    <div class="cal">
+      <div class="calh"><button type="button" id="cprev" aria-label="Bulan sebelumnya">‹</button><b id="ctitle"></b><button type="button" id="cnext" aria-label="Bulan berikutnya">›</button></div>
+      <div class="calg" id="calg"></div>
+      <div class="cleg" id="cleg"></div>
+    </div>
+    <p class="jhint">Pilih tanggal di kalender untuk melihat atau menulis catatan hari itu.</p>
+    <div class="jdate" id="jdate"></div>
+    <div class="moods" id="moods" role="radiogroup" aria-label="Suasana hati hari ini"></div>
+    <label class="jlab" for="jtext">Apa yang kamu rasakan?</label>
+    <textarea id="jtext" maxlength="2000" placeholder="Tulis bebas. Tidak ada jawaban benar atau salah."></textarea>
+    <div class="jrow"><button class="cta" id="jsave" type="button">Simpan catatan</button><span id="jmsg" role="status"></span></div>
+    <h4>7 hari terakhir</h4>
+    <div class="strip" id="strip"></div>
+    <h4>Catatan sebelumnya</h4>
+    <div id="jlist"></div>
+  </section>
+
+  <section id="konsultasi" class="box consult" aria-labelledby="kt">
+    <h3 id="kt">Konsultasi pribadi</h3>
+    <p class="jhint">Bicara langsung dengan tenaga profesional jika hasil tesmu membuatmu khawatir atau gejala mengganggu keseharianmu.</p>
+    <div class="pros">
+      <div class="pro pp"><span class="pi">🧠</span><h4>Psikolog</h4><p>Konseling dan terapi bicara untuk stres, rasa cemas, sedih berkepanjangan, masalah hubungan, atau tekanan hidup. Psikolog tidak meresepkan obat.</p></div>
+      <div class="pro pr"><span class="pi">⚕️</span><h4>Psikiater</h4><p>Dokter spesialis kesehatan jiwa. Menilai kondisi secara medis, menegakkan diagnosis, dan dapat meresepkan obat bila perlu. Cocok untuk gejala berat atau yang tidak membaik.</p></div>
+    </div>
+    <div class="cform">
+      <h4>Buat janji konsultasi</h4>
+      <label class="jlab" for="cname" style="margin-top:12px">Nama</label>
+      <input id="cname" type="text" autocomplete="name" maxlength="80">
+      <label class="jlab" for="csvc">Yang ingin ditemui</label>
+      <select id="csvc"><option>Psikolog</option><option>Psikiater</option><option>Belum tahu, saya butuh arahan</option></select>
+      <label class="jlab" for="cdate">Tanggal yang diinginkan</label>
+      <input id="cdate" type="date">
+      <label class="jlab" for="cnote">Keluhan singkat (boleh dikosongkan)</label>
+      <textarea id="cnote" maxlength="600" placeholder="Ceritakan secukupnya saja. Detailnya bisa dibahas saat bertemu."></textarea>
+      <a class="cta csend" id="csend" href="mailto:mrfadli33@gmail.com">Kirim permintaan lewat email</a>
+      <p class="jhint" id="cmsg" role="status" style="margin-top:10px"></p>
+    </div>
+    <div class="box crisis" role="note" style="margin-top:18px"><p style="margin:0">Jika sedang dalam keadaan darurat atau muncul pikiran untuk mengakhiri hidup, jangan menunggu balasan email. Hubungi <b>119 lalu tekan ekstensi 8</b> atau datang ke IGD terdekat. Alamat tempat praktik ada di <a href="#kontak">bagian kontak</a>.</p></div>
+  </section>
+
+  <section class="box contact" aria-labelledby="kontak">
+    <h3 id="kontak">Hubungi layanan Mindcare</h3>
+    <p style="margin:0">Ada pertanyaan, masukan, atau kendala saat memakai Mindcare? Kirim email ke <a href="mailto:mrfadli33@gmail.com?subject=Mindcare%20Kesehatan%20Mental">mrfadli33@gmail.com</a>. Dikelola oleh <b>FA Studio</b>.</p>
+    <p style="margin:14px 0 0">MH66+XGW, Krajan Lor, Sumberejo, Kec. Pabelan, Kabupaten Semarang, Jawa Tengah 50771<br>Lihat lokasi dan petunjuk arah di <a href="https://maps.app.goo.gl/2m9EQu4K7QHMamud7" target="_blank" rel="noopener">Google Maps</a>.</p>
+    <a class="map" href="https://maps.app.goo.gl/2m9EQu4K7QHMamud7" target="_blank" rel="noopener" aria-label="Buka lokasi FA Studio di Google Maps">
+      <svg viewBox="0 0 600 260" role="img" aria-label="Ilustrasi lokasi FA Studio di Pabelan, Kabupaten Semarang">
+        <rect width="600" height="260" style="fill:var(--soft)"/>
+        <rect x="440" y="190" width="130" height="50" rx="10" style="fill:var(--b0);opacity:.3"/>
+        <g style="fill:var(--surface);opacity:.55"><rect x="20" y="90" width="130" height="36" rx="6"/><rect x="230" y="20" width="150" height="36" rx="6"/><rect x="450" y="96" width="120" height="36" rx="6"/><rect x="30" y="190" width="120" height="44" rx="6"/></g>
+        <g fill="none" stroke-linecap="round" style="stroke:var(--surface)"><path d="M0 150C150 130 450 190 600 150" stroke-width="16"/><path d="M180 0L210 260" stroke-width="12"/><path d="M430 0L400 260" stroke-width="12"/><path d="M0 66L600 82" stroke-width="7"/></g>
+        <ellipse cx="300" cy="172" rx="14" ry="4" style="fill:var(--ink);opacity:.2"/>
+        <path d="M300 70c-22 0-38 16-38 38 0 28 38 62 38 62s38-34 38-62c0-22-16-38-38-38z" style="fill:var(--accent)"/>
+        <circle cx="300" cy="108" r="13" style="fill:var(--accent-ink)"/>
+        <rect x="205" y="182" width="190" height="28" rx="14" style="fill:var(--surface);stroke:var(--line)"/>
+        <text x="300" y="201" text-anchor="middle" font-size="14" font-weight="600" style="fill:var(--ink)">Mindcare FA Studio</text>
+      </svg>
+      <span class="mapcta">Buka di Google Maps</span>
+    </a>
+  </section>
+
+  <footer>PHQ-9 dan GAD-7 adalah instrumen skrining tervalidasi yang dipakai luas secara internasional. Versi 50 soal disusun dari gejala umum dan divalidasi secara klinis secara berkala. Hasil skoring berupa angka yang hanya untuk mengetahui gambaran awal.<br>© 2026 Mindcare oleh FA Studio.</footer>
+</main>
+
+<script>
+var OPT=["Tidak Pernah","Kadang","Sering","Hampir Selalu"];
+var T={
+phq9:{name:"PHQ-9",short:"Depresi PHQ-9",desc:"Tes singkat 9 pertanyaan, sekitar 2 menit.",risk:[8],crit:20,intro:"Dalam 2 minggu terakhir, seberapa sering kamu terganggu oleh masalah berikut?",
+q:["Kurang berminat atau kurang senang melakukan sesuatu","Merasa murung, sedih, atau putus asa","Sulit tidur, tidur tidak nyenyak, atau tidur terlalu banyak","Merasa lelah atau kurang berenergi","Nafsu makan berkurang atau makan berlebihan","Merasa buruk tentang diri sendiri, merasa gagal, atau mengecewakan diri sendiri dan keluarga","Sulit berkonsentrasi, misalnya saat membaca atau menonton","Bergerak atau berbicara sangat lambat, atau sebaliknya sangat gelisah sampai sulit diam","Berpikir lebih baik mati saja, atau ingin menyakiti diri sendiri"],
+bands:[[4,"Minimal","Gejalamu hampir tidak terasa. Pertahankan rutinitas tidur, makan, dan gerak yang sudah berjalan."],[9,"Ringan","Ada beberapa gejala yang mulai terasa. Perhatikan pola tidur, aktivitas fisik, dan cerita ke orang yang kamu percaya. Ulangi tes ini 2 minggu lagi."],[14,"Sedang","Gejalamu cukup mengganggu. Sebaiknya bicara dengan psikolog atau dokter di puskesmas untuk penilaian lebih lanjut."],[19,"Cukup berat","Gejalamu berat dan kemungkinan mengganggu keseharian. Segera jadwalkan konsultasi dengan psikolog, psikiater, atau dokter."],[27,"Berat","Gejalamu sangat berat. Segera cari bantuan profesional dan jangan menghadapinya sendirian."]]},
+gad7:{name:"GAD-7",short:"Kecemasan (Anxiety) GAD-7",desc:"Anxiety adalah rasa cemas dan khawatir berlebihan. 7 pertanyaan, sekitar 2 menit.",intro:"Dalam 2 minggu terakhir, seberapa sering kamu terganggu oleh masalah berikut?",
+q:["Merasa gugup, cemas, atau tegang","Tidak mampu menghentikan atau mengendalikan rasa khawatir","Terlalu mengkhawatirkan berbagai hal","Sulit untuk rileks","Begitu gelisah sampai sulit duduk diam","Mudah kesal atau mudah marah","Merasa takut seolah-olah akan terjadi hal buruk"],
+bands:[[4,"Minimal","Tingkat cemasmu masih dalam batas wajar. Tetap jaga waktu istirahat dan batasi kafein bila perlu."],[9,"Ringan","Ada rasa cemas yang mulai terasa. Latihan napas pelan, olahraga ringan, dan menulis hal yang dikhawatirkan sering membantu."],[14,"Sedang","Kecemasanmu cukup mengganggu. Pertimbangkan berbicara dengan psikolog atau dokter."],[21,"Berat","Kecemasanmu berat. Segera konsultasi dengan psikolog, psikiater, atau dokter."]]},
+phq:{name:"Suasana hati",short:"Depresi (50 soal)",desc:"50 pertanyaan tentang suasana hati, energi, tidur, pikiran, dan hubungan sosial.",risk:[46,47,48],crit:120,
+intro:"Dalam 2 minggu terakhir, seberapa sering kamu terganggu oleh masalah berikut?",
+q:["Merasa sedih atau murung hampir sepanjang hari","Merasa hampa atau kosong di dalam","Merasa putus asa tentang masa depan","Mudah menangis tanpa sebab yang jelas","Merasa tidak akan ada hal baik yang terjadi","Kehilangan minat pada hobi yang dulu disukai","Tidak lagi menikmati hal yang biasanya menyenangkan","Sulit merasa senang meski ada kabar baik","Malas memulai kegiatan sehari-hari","Menunda pekerjaan atau tugas penting karena tidak bersemangat","Merasa lelah meski tidak banyak beraktivitas","Tubuh terasa berat atau lemas","Tidak punya tenaga untuk mandi, berpakaian, atau merapikan diri","Sulit tidur di malam hari","Terbangun terlalu dini dan tidak bisa tidur lagi","Tidur terlalu lama tetapi tetap merasa tidak segar","Tidur tidak nyenyak atau sering terbangun","Nafsu makan menurun","Makan berlebihan untuk meredakan perasaan","Berat badan naik atau turun tanpa disengaja","Sulit berkonsentrasi pada pekerjaan atau pelajaran","Sulit mengambil keputusan, bahkan yang sepele","Sering lupa hal yang baru saja terjadi","Pikiran terasa lambat atau berkabut","Sulit menyelesaikan bacaan atau tontonan","Merasa diri tidak berharga","Merasa gagal dalam hidup","Menyalahkan diri sendiri atas hal yang bukan salahku","Merasa bersalah secara berlebihan","Merasa menjadi beban bagi orang lain","Sering mengkritik diri sendiri dengan keras","Merasa lebih rendah dibanding orang lain","Menarik diri dari teman dan keluarga","Enggan menjawab pesan atau telepon","Menghindari acara sosial yang dulu kuikuti","Merasa tidak ada yang benar-benar memahamiku","Merasa kesepian meski berada di tengah orang lain","Mudah tersinggung atau marah","Merasa tertekan oleh tugas yang biasanya bisa kuhadapi","Bergerak atau berbicara lebih lambat dari biasanya","Gelisah dan sulit diam","Sakit kepala, nyeri badan, atau gangguan pencernaan tanpa sebab medis yang jelas","Pekerjaan, sekolah, atau urusan rumah terganggu oleh perasaanku","Merasa tidak sanggup menghadapi hari esok","Merasa tidak ada yang bisa membantu keadaanku","Merasa terjebak dalam keadaan yang tidak bisa diubah","Berpikir bahwa lebih baik tidak hidup lagi","Terlintas pikiran untuk mengakhiri hidup","Terlintas keinginan untuk menyakiti diri sendiri","Merasa hidupku tidak memiliki arti"],
+bands:[[29,"Minimal","Gejalamu hampir tidak terasa. Pertahankan rutinitas tidur, makan, dan gerak yang sudah berjalan."],[59,"Ringan","Ada beberapa gejala yang mulai terasa. Perhatikan pola tidur, aktivitas fisik, dan cerita ke orang yang kamu percaya. Ulangi tes ini 2 minggu lagi."],[89,"Sedang","Gejalamu cukup mengganggu. Sebaiknya bicara dengan psikolog atau dokter di puskesmas untuk penilaian lebih lanjut."],[119,"Cukup berat","Gejalamu berat dan kemungkinan mengganggu keseharian. Segera jadwalkan konsultasi dengan psikolog, psikiater, atau dokter."],[150,"Berat","Gejalamu sangat berat. Segera cari bantuan profesional dan jangan menghadapinya sendirian."]]},
+gad:{name:"Kecemasan (Anxiety)",short:"Kecemasan (Anxiety) 50 soal",desc:"Anxiety adalah rasa cemas dan khawatir berlebihan. 50 pertanyaan tentang rasa khawatir, gejala fisik, tidur, dan rasa takut.",
+intro:"Dalam 2 minggu terakhir, seberapa sering kamu terganggu oleh masalah berikut?",
+q:["Merasa gugup atau tegang","Sulit mengendalikan rasa khawatir","Mengkhawatirkan banyak hal sekaligus","Khawatir berlebihan tentang kesehatan","Khawatir berlebihan tentang uang atau pekerjaan","Khawatir berlebihan tentang keluarga atau orang terdekat","Terus memikirkan kemungkinan terburuk","Merasa akan terjadi hal buruk","Sulit berhenti memikirkan kejadian yang sudah lewat","Sulit rileks","Merasa waspada berlebihan","Mudah terkejut","Gelisah dan sulit duduk diam","Merasa seperti di ujung tanduk","Jantung berdebar kencang tanpa sebab yang jelas","Napas terasa pendek atau sesak saat cemas","Telapak tangan berkeringat atau dingin","Tangan atau tubuh gemetar","Pusing atau kepala terasa ringan","Mual atau perut melilit saat cemas","Otot tegang, leher atau bahu kaku","Sakit kepala karena tegang","Mulut kering atau tenggorokan terasa tercekat","Sulit tertidur karena pikiran berputar","Terbangun di malam hari dengan rasa cemas","Tidur tidak nyenyak karena khawatir","Mudah lelah karena terus merasa tegang","Sulit berkonsentrasi karena pikiran dipenuhi kekhawatiran","Pikiran tiba-tiba kosong saat cemas","Mudah kesal atau marah","Takut kehilangan kendali","Panik mendadak dengan rasa takut yang kuat","Takut serangan panik akan datang lagi","Cemas berlebihan saat berada di keramaian","Cemas saat harus berbicara atau tampil di depan orang","Takut dinilai atau dikritik orang lain","Menghindari situasi tertentu karena cemas","Cemas berlebihan saat bertemu orang baru","Memastikan sesuatu berulang kali, misalnya kunci, kompor, atau pesan","Sulit mengambil keputusan karena takut salah","Menunda tugas karena cemas hasilnya tidak sempurna","Menuntut diri harus sempurna agar merasa tenang","Butuh banyak dihibur orang lain agar merasa aman","Cemas berlebihan saat berpisah dengan orang terdekat","Cemas saat bepergian atau berada di tempat asing","Teringat terus pada kejadian menakutkan yang pernah dialami","Kecemasan mengganggu pekerjaan atau sekolahku","Kecemasan mengganggu hubunganku dengan orang lain","Lelah karena harus terus berusaha menenangkan diri","Merasa kecemasan sulit dikendalikan meski sudah mencoba"],
+bands:[[29,"Minimal","Tingkat cemasmu masih dalam batas wajar. Tetap jaga waktu istirahat dan batasi kafein bila perlu."],[59,"Ringan","Ada rasa cemas yang mulai terasa. Latihan napas pelan, olahraga ringan, dan menulis hal yang dikhawatirkan sering membantu."],[89,"Sedang","Kecemasanmu cukup mengganggu. Pertimbangkan berbicara dengan psikolog atau dokter."],[150,"Berat","Kecemasanmu berat. Segera konsultasi dengan psikolog, psikiater, atau dokter."]]}
+};
+var COL=["var(--b0)","var(--b1)","var(--b2)","var(--b3)","var(--b4)"];
+var cur=null,ans=[];
+var $=function(id){return document.getElementById(id)};
+
+Object.keys(T).forEach(function(k){
+  var b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed","false");b.dataset.k=k;
+  var M={phq9:['🌙','Tes singkat'],phq:['🌧️','Tes lengkap'],gad7:['🌊','Tes singkat'],gad:['🌀','Tes lengkap']}[k];b.innerHTML='<i class="ck">✓</i><span class="ico">'+M[0]+'</span><b>'+T[k].short+'</b><span class="pd">'+T[k].desc+'</span><span class="tag">'+M[1]+'</span>';
+  b.onclick=function(){start(k)};$("pick").appendChild(b);
+});
+
+function start(k){
+  cur=k;ans=new Array(T[k].q.length).fill(null);
+  [].forEach.call($("pick").children,function(b){b.setAttribute("aria-pressed",b.dataset.k===k)});
+  $("tname").textContent=T[k].name;$("intro").textContent=T[k].intro;
+  var f=$("form");f.innerHTML="";
+  T[k].q.forEach(function(q,i){
+    var fs=document.createElement("fieldset"),lg=document.createElement("legend");
+    lg.innerHTML='<div class="qh"><b class="qn">'+(i+1)+'</b><span class="qt"></span></div>';lg.querySelector('.qt').textContent=q;fs.appendChild(lg);
+    var o=document.createElement("div");o.className="opts";
+    OPT.forEach(function(t,v){
+      var l=document.createElement("label"),r=document.createElement("input");
+      r.type="radio";r.name="q"+i;r.value=v;
+      r.onchange=function(){ans[i]=v;fs.classList.add('done');upd()};
+      var s=document.createElement("span");s.textContent=t;s.dataset.v=v;l.appendChild(r);l.appendChild(s);o.appendChild(l);
+    });
+    fs.appendChild(o);f.appendChild(fs);
+  });
+  $("quiz").hidden=false;$("result").hidden=true;upd();
+  $("quiz").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function upd(){
+  var n=ans.filter(function(a){return a!==null}).length,t=ans.length;
+  $("count").textContent=n+" dari "+t+" terjawab";
+  $("prog").style.width=(n/t*100)+"%";$("go").disabled=n<t;
+}
+$("go").onclick=function(){
+  var t=T[cur],sum=ans.reduce(function(a,b){return a+b},0),bi=0;
+  for(var i=0;i<t.bands.length;i++){if(sum<=t.bands[i][0]){bi=i;break}}
+  var max=t.bands[t.bands.length-1][0],prev=-1,gauge="",ticks="";
+  t.bands.forEach(function(b,i){
+    var w=b[0]-prev;prev=b[0];
+    gauge+='<div style="background:'+COL[i]+'"></div>';
+    ticks+='<span>'+b[1]+'</span>';
+  });
+  var cols=t.bands.map(function(b,i){var p=i?t.bands[i-1][0]+1:0;return (b[0]-p+1)+"fr"}).join(" ");
+  var pos=(sum+.5)/(max+1)*100;
+  var risk=(t.risk||[]).some(function(i){return ans[i]>0});
+  var tips="<ul><li>Bicara dengan orang yang kamu percaya, seperti keluarga atau teman.</li><li>Jaga jam tidur, makan teratur, dan bergerak minimal 20 menit per hari.</li><li>Kalau gejala bertahan lebih dari 2 minggu, <a href=\"#konsultasi\">buat janji konsultasi</a> dengan psikolog atau psikiater.</li></ul>";
+  var h='<h2>Hasil '+t.short+'</h2><div class="score"><strong>'+sum+'</strong><em>dari '+max+': '+t.bands[bi][1]+'</em></div>'+
+  '<div class="gauge" style="grid-template-columns:'+cols+'"><span class="pin" style="left:0"></span>'+gauge+'</div>'+
+  '<div class="ticks" style="grid-template-columns:'+cols+'">'+ticks+'</div>'+
+  '<div class="box"><h3>Artinya apa?</h3><p style="margin:0">'+t.bands[bi][2]+'</p>'+tips+'</div>';
+  if(risk||(t.crit&&sum>=t.crit)){
+    h+='<div class="box crisis" role="alert"><h3>Kamu tidak harus menghadapinya sendirian</h3><p style="margin:0">'+(risk?'Kamu menjawab bahwa ada pikiran untuk mati atau menyakiti diri sendiri. Itu penting, dan kamu layak mendapat dukungan sekarang. ':'')+'Hubungi layanan Kemenkes di <b>119 lalu tekan ekstensi 8</b>, atau datang ke IGD atau puskesmas terdekat. Jika kamu dalam bahaya saat ini, minta seseorang menemanimu dan segera hubungi layanan darurat.</p></div>';
+  }
+  h+='<button class="cta" id="again" type="button">Ulangi tes ini</button><button class="cta ghost" id="other" type="button">Coba tes lainnya</button>';
+  var r=$("result");r.innerHTML=h;r.hidden=false;countUp(r.querySelector('.score strong'),sum);var pn=r.querySelector('.pin');setTimeout(function(){pn.style.left=pos+'%'},60);
+  $("again").onclick=function(){start(cur)};
+  $("other").onclick=function(){start({phq:"gad",gad:"phq",phq9:"gad7",gad7:"phq9"}[cur])};
+  r.scrollIntoView({behavior:"smooth",block:"start"});
+};
+
+var JK='mindcare_jurnal',JS={},jm=null,tk=null,DN=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+var MD=[['😄','Sangat baik'],['🙂','Baik'],['😐','Biasa'],['😕','Kurang baik'],['😢','Buruk']];
+function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function jsave(){try{localStorage.setItem(JK,JSON.stringify(JS));return true}catch(e){return false}}
+try{JS=JSON.parse(localStorage.getItem(JK)||'{}')||{}}catch(e){JS={}}
+tk=ymd(new Date());var TODAY=tk,cd=new Date(),cy=cd.getFullYear(),cm=cd.getMonth();
+function dlab(k){var p=k.split('-');return new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+function setLab(){$('jdate').textContent=dlab(tk)+(tk===TODAY?' (hari ini)':'')}
+setLab();
+function setMood(i){jm=i;[].forEach.call($('moods').children,function(b,k){b.setAttribute('aria-checked',String(k===i))})}
+MD.forEach(function(m,i){var b=document.createElement('button');b.type='button';b.setAttribute('role','radio');b.dataset.m=i;b.setAttribute('aria-checked','false');b.innerHTML='<span>'+m[0]+'</span>'+m[1];b.onclick=function(){setMood(i)};$('moods').appendChild(b)});
+var MN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function pickDay(k){tk=k;var e=JS[k];$('jtext').value=e&&e.t?e.t:'';setMood(e&&e.m!=null?e.m:null);$('jmsg').textContent='';setLab();crender()}
+function crender(){
+  $('ctitle').textContent=MN[cm]+' '+cy;
+  var g=$('calg');g.innerHTML='';
+  DN.forEach(function(n){var h=document.createElement('div');h.className='cdn';h.textContent=n;g.appendChild(h)});
+  var first=new Date(cy,cm,1).getDay(),days=new Date(cy,cm+1,0).getDate();
+  for(var i=0;i<first;i++){g.appendChild(document.createElement('span'))}
+  for(var d=1;d<=days;d++){
+    var k=cy+'-'+('0'+(cm+1)).slice(-2)+'-'+('0'+d).slice(-2),e=JS[k],b=document.createElement('button');
+    b.type='button';b.className='cd'+(k===tk?' sel':'')+(k===TODAY?' today':'');
+    if(e&&e.m!=null){b.className+=' mood';b.style.setProperty('--mc',COL[e.m])}else if(e&&e.t){b.className+=' has'}
+    b.innerHTML='<b>'+d+'</b><em>'+(e&&e.m!=null?MD[e.m][0]:'')+'</em>';
+    b.setAttribute('aria-label',d+' '+MN[cm]+(e&&e.m!=null?', '+MD[e.m][1]:''));
+    if(k>TODAY){b.disabled=true}
+    b.onclick=(function(k){return function(){pickDay(k)}})(k);
+    g.appendChild(b)}
+  var now=new Date();
+  $('cnext').disabled=(cy>now.getFullYear()||(cy===now.getFullYear()&&cm>=now.getMonth()));
+}
+$('cprev').onclick=function(){cm--;if(cm<0){cm=11;cy--}crender()};
+$('cnext').onclick=function(){cm++;if(cm>11){cm=0;cy++}crender()};
+$('cleg').innerHTML=MD.map(function(m,i){return '<span><i style="background:'+COL[i]+'"></i>'+m[1]+'</span>'}).join('');
+function jrender(){
+  crender();
+  var st=$('strip');st.innerHTML='';
+  for(var d=6;d>=0;d--){var dt=new Date();dt.setDate(dt.getDate()-d);var e=JS[ymd(dt)],c=document.createElement('div'),i=document.createElement('i');
+    if(e&&e.m!=null){i.className='on';i.style.background=COL[e.m];i.title=MD[e.m][1]}
+    c.appendChild(i);c.appendChild(document.createTextNode(DN[dt.getDay()]));st.appendChild(c)}
+  var L=$('jlist');L.innerHTML='';
+  var ks=Object.keys(JS).sort().reverse();
+  if(!ks.length){L.innerHTML='<p style="color:var(--mute);margin:12px 0 0">Belum ada catatan. Tulis yang pertama hari ini.</p>';return}
+  ks.forEach(function(k){var e=JS[k],div=document.createElement('div');div.className='entry';
+    var p=k.split('-'),lab=new Date(+p[0],+p[1]-1,+p[2]).toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    var h=document.createElement('div');h.className='eh';
+    var s1=document.createElement('b');s1.textContent=lab;
+    var s2=document.createElement('span');s2.textContent=e.m!=null?MD[e.m][0]+' '+MD[e.m][1]:'Tanpa suasana hati';
+    h.appendChild(s1);h.appendChild(s2);div.appendChild(h);
+    if(e.t){var t=document.createElement('p');t.textContent=e.t;div.appendChild(t)}
+    var x=document.createElement('button');x.type='button';x.textContent='Hapus';
+    x.onclick=function(){if(x.dataset.c){delete JS[k];jsave();if(k===tk){$('jtext').value='';setMood(null)}jrender()}else{x.dataset.c='1';x.textContent='Yakin hapus?'}};
+    div.appendChild(x);L.appendChild(div)});
+}
+function countUp(el,to){
+  if(!matchMedia('(prefers-reduced-motion:no-preference)').matches){el.textContent=to;return}
+  var t0=null;el.textContent=0;
+  function f(t){if(t0===null)t0=t;var p=Math.min((t-t0)/900,1);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f)}
+  requestAnimationFrame(f)}
+(function(){
+  if(!('IntersectionObserver' in window)||!matchMedia('(prefers-reduced-motion:no-preference)').matches)return;
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.1});
+  document.querySelectorAll('.journal,.consult,.contact').forEach(function(e){e.classList.add('reveal');io.observe(e)})
+})();
+var te=JS[tk];if(te){$('jtext').value=te.t||'';if(te.m!=null)setMood(te.m)}
+$('jsave').onclick=function(){var t=$('jtext').value.trim();
+  if(jm===null&&!t){$('jmsg').textContent='Pilih suasana hati atau tulis catatan dulu.';return}
+  JS[tk]={m:jm,t:t,ts:Date.now()};
+  $('jmsg').textContent=jsave()?'Catatan tersimpan di perangkat ini.':'Browser ini tidak mengizinkan penyimpanan. Catatan hanya bertahan sampai halaman ditutup.';
+  jrender()};
+jrender();
+
+(function(){
+  var sv=$('csvc'),a=$('csend');
+  $('cdate').min=TODAY;
+  a.onclick=function(e){
+    var nm=$('cname').value.trim();
+    if(!nm){e.preventDefault();$('cmsg').textContent='Isi nama dulu supaya kami tahu siapa yang dihubungi.';$('cname').focus();return}
+    var dv=$('cdate').value,nt=$('cnote').value.trim();
+    var body='Halo FA Studio,\n\nSaya ingin membuat janji konsultasi.\n\nNama: '+nm+'\nYang ingin ditemui: '+sv.value+'\nTanggal yang diinginkan: '+(dv?dlab(dv):'Fleksibel')+'\nKeluhan singkat: '+(nt||'-')+'\n\nTerima kasih.';
+    a.href='mailto:mrfadli33@gmail.com?subject='+encodeURIComponent('Permintaan konsultasi: '+sv.value)+'&body='+encodeURIComponent(body);
+    $('cmsg').textContent='Aplikasi email akan terbuka. Tekan kirim di sana untuk menyelesaikan permintaan.';
+  };
+})();
+
+(function(){
+  var L=[].slice.call(document.querySelectorAll('.nav a'));
+  function mark(id){L.forEach(function(a){var on=a.getAttribute('href')==='#'+id;a.classList.toggle('on',on);if(on)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current')})}
+  if(!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting)mark(x.target.id)})},{rootMargin:'-35% 0px -55% 0px'});
+  ['pick','jurnal','konsultasi'].forEach(function(id){var e=document.getElementById(id);if(e)io.observe(e)});
+})();
+
+var tb=$("theme"),root=document.documentElement;
+tb.onclick=function(){
+  var dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  root.dataset.theme=dark?"light":"dark";tb.textContent=dark?"Mode gelap":"Mode terang";
+};
+if(matchMedia("(prefers-color-scheme:dark)").matches)tb.textContent="Mode terang";
+</script>
+</body>
+</html>
